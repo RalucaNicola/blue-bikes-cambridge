@@ -8,7 +8,7 @@ import { setAuthenticationInfo } from '../store/authenticationSlice';
 export const setupIdentityManager = () => async (dispatch: AppDispatch) => {
   const portal = new Portal({ url: portalUrl });
   const authInfo = new OAuthInfo({
-    appId: '55DVg0Bhw8eNhX7V',
+    appId: 'sUpbzmkYvEUowCbO',
     flowType: 'auto',
     popup: false,
     portalUrl
