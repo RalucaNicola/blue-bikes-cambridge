@@ -1,18 +1,19 @@
 import StreamLayer from "@arcgis/core/layers/StreamLayer";
-import { bikeFeedRenderer } from "../../utils/renderers";
+import { bikeFeedRenderer } from "../../utils/symbology";
 import LabelClass from "@arcgis/core/layers/support/LabelClass";
 import { LabelSymbol3D, TextSymbol3DLayer } from "@arcgis/core/symbols";
 
 const bikeFeed = new StreamLayer({
-    url: "https://us-iot.arcgis.com/d8avj4l9dv7mdfsa/d8avj4l9dv7mdfsa/streams/arcgis/rest/services/Routes/StreamServer",
+    url: "https://us-iot.arcgis.com/d8avj4l9dv7mdfsa/d8avj4l9dv7mdfsa/streams/arcgis/rest/services/bike_trips_07_20/StreamServer",
     elevationInfo: {
         mode: "relative-to-scene"
     },
     renderer: bikeFeedRenderer,
+    updateInterval: 2000,
     labelingInfo: [
         new LabelClass({
             labelExpressionInfo: {
-                expression: `$feature.Name + TextFormatting.NewLine + "Started at: " + Hour($feature.Time) + ":" + Minute($feature.Time) + TextFormatting.NewLine`
+                expression: `$feature.Name + TextFormatting.NewLine + Hour($feature.Time) + ":" + Minute($feature.Time) + TextFormatting.NewLine`
             },
             labelPlacement: "center-right",
             symbol: new LabelSymbol3D({

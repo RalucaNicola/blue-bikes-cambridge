@@ -7,7 +7,9 @@ import { getMapCenterFromHashParams } from '../../utils/URLHashParams';
 import { setError } from '../../store/errorSlice';
 import { initializeViewEventListeners } from './eventListeners';
 import SceneView from '@arcgis/core/views/SceneView';
-import { addBikeFeedToMap, removeBikeFeedFromMap } from './bike-feed';
+import { addBikeFeedToMap, removeBikeFeedFromMap } from './bikeFeed';
+import { destroyStations, initializeStations } from './stationFeed';
+import LayerList from '@arcgis/core/widgets/LayerList';
 
 let view: __esri.SceneView = null;
 
@@ -18,6 +20,7 @@ export function getView() {
 export function destroyView() {
     if (view) {
         removeBikeFeedFromMap(view);
+        destroyStations(view);
         view.destroy();
         view = null;
     }
@@ -67,6 +70,10 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
             window.view = view;
             dispatch(initializeViewEventListeners());
             addBikeFeedToMap(view);
+            initializeStations(view);
+            const layerList = new LayerList({ view });
+
+            view.ui.add(layerList, "top-right");
         });
     } catch (error) {
         const { message } = error;
