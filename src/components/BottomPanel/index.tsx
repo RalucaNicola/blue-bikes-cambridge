@@ -19,7 +19,9 @@ const BottomPanel = () => {
   const getHeader = () => {
     return (
       <div className={styles.actionsContainer}>
-        <div className={styles.leftActionsContainer}>Hello ArcGIS Maps SDK for JavaScript</div>
+        <div className={styles.leftActionsContainer}>
+          <h1>Blue Bike Cambridge</h1>
+        </div>
         <div className={styles.rightActionsContainer}>
           <CalciteAction
             icon='information-f'

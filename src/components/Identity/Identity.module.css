@@ -13,10 +13,8 @@
   composes: background from '../../utils/utils.module.css';
   clear: both;
   margin-top: 40px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
   padding: 15px;
-  border: 1px solid rgba(255 255 255 / 20%);
+  box-shadow: var(--box-shadow);
 }
 
 .userTitle {

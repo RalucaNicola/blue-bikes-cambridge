@@ -1,13 +1,10 @@
 .container {
   composes: background from '../../utils/utils.module.css';
   position: absolute;
-  bottom: var(--margin);
-  left: var(--margin);
-  right: var(--margin);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 15px;
-  border: 1px solid rgba(255 255 255 / 20%);
 }
 
 .actionsContainer {
@@ -21,6 +18,17 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+
+.leftActionsContainer h1 {
+  font-size: 1.1rem;
+  margin: 0;
+  padding-left: 6px;
+  font-weight: normal;
+  letter-spacing: 3px;
+  color: white;
+  text-transform: uppercase;
+  background: linear-gradient(45deg, #03a9fc, transparent);
 }
 
 .rightActionsContainer {

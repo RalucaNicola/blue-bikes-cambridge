@@ -55,12 +55,8 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
         view = new SceneView({
             container: divRef,
             map: webmap,
-            padding: {
-                top: 50,
-                bottom: 0
-            },
             ui: {
-                components: []
+                components: ["zoom"]
             },
             popup: {
                 dockEnabled: true,

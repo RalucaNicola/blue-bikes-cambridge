@@ -1,5 +1,20 @@
 @import 'https://js.arcgis.com/4.27/@arcgis/core/assets/esri/themes/dark/main.css';
 
+.calcite-mode-dark,
+:root {
+  --calcite-ui-brand: #03a9fc;
+  --calcite-ui-brand-hover: #005a87;
+  --border-radius: 10px;
+  --box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --margin: 15px;
+  --background-color: rgba(0 0 0 / 40%);
+  --calcite-font-size--1: 0.85rem;
+  --calcite-ui-text-1: rgb(230, 230, 230);
+  --calcite-ui-text-2: rgb(210, 210, 210);
+  --calcite-ui-text-3: rgb(150, 150, 150);
+  --calcite-label-margin-bottom: 0;
+}
+
 html,
 body,
 #root {
@@ -9,22 +24,7 @@ body,
   width: 100%;
   font-family: var(--calcite-sans-family);
   color: var(--calcite-ui-text-1);
-  background: #a8a8a8;
-}
-
-.calcite-mode-dark,
-:root {
-  --calcite-ui-brand: rgb(0, 217, 109);
-  --calcite-ui-brand-hover: #04532c;
-  --border-radius: 10px;
-  --box-shadow: 0 0 12px rgb(0 0 0 / 100%);
-  --margin: 15px;
-  --background-color: rgba(50 50 50 / 60%);
-  --calcite-font-size--1: 0.85rem;
-  --calcite-ui-text-1: rgb(230, 230, 230);
-  --calcite-ui-text-2: rgb(210, 210, 210);
-  --calcite-ui-text-3: rgb(150, 150, 150);
-  --calcite-label-margin-bottom: 0;
+  background: var(--background-color);
 }
 
 a {
@@ -34,6 +34,12 @@ a {
 
 a:hover {
   color: var(--calcite-ui-text-1);
+}
+
+.esri-widget {
+  background-color: var(--background-color) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 /* remove outline from map */
