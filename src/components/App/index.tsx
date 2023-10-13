@@ -1,3 +1,4 @@
+import BasemapToggle from '../BasemapToggle';
 import BottomPanel from '../BottomPanel';
 import { ErrorAlert } from '../ErrorAlert';
 import { Identity } from '../Identity';
@@ -8,6 +9,7 @@ const App = () => {
   return (
     <>
       <Map></Map>
+      <BasemapToggle></BasemapToggle>
       <BottomPanel></BottomPanel>
       <ErrorAlert></ErrorAlert>
       <Identity></Identity>

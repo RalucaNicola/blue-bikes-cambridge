@@ -17,9 +17,7 @@ const bikeFeed = new StreamLayer({
             },
             labelPlacement: "center-right",
             symbol: new LabelSymbol3D({
-
                 symbolLayers: [new TextSymbol3DLayer({
-
                     material: {
                         color: "#03a9fc"
                     },
