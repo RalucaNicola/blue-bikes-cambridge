@@ -10,6 +10,9 @@ const bikeFeed = new StreamLayer({
     },
     renderer: bikeFeedRenderer,
     updateInterval: 2000,
+    purgeOptions: {
+        ageReceived: 1
+    },
     labelingInfo: [
         new LabelClass({
             labelExpressionInfo: {
@@ -36,7 +39,19 @@ const bikeFeed = new StreamLayer({
     ]
 });
 
-export const addBikeFeedToMap = (view: __esri.SceneView) => {
+let bikeFeedLayerView: __esri.StreamLayerView = null;
+
+
+export const initializeBikeFeed = async (view: __esri.SceneView) => {
+    addBikeFeedToMap(view);
+    bikeFeedLayerView = await view.whenLayerView(bikeFeed);
+    bikeFeedLayerView.on("data-received", async (event) => {
+        const features = await bikeFeedLayerView.queryFeatureCount();
+        console.log("features", features);
+    })
+}
+
+const addBikeFeedToMap = (view: __esri.SceneView) => {
     view.map.add(bikeFeed);
 }
 

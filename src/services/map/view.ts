@@ -7,7 +7,7 @@ import { getMapCenterFromHashParams } from '../../utils/URLHashParams';
 import { setError } from '../../store/errorSlice';
 import { initializeViewEventListeners } from './eventListeners';
 import SceneView from '@arcgis/core/views/SceneView';
-import { addBikeFeedToMap, removeBikeFeedFromMap } from './bikeFeed';
+import { addBikeFeedToMap, initializeBikeFeed, removeBikeFeedFromMap } from './bikeFeed';
 import { destroyStations, initializeStations } from './stationFeed';
 import { toggleBasemap } from '../../store/basemapSlice';
 import { PayloadAction, UnsubscribeListener } from '@reduxjs/toolkit';
@@ -82,7 +82,7 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
             cartographicBasemap = view.map.layers.find(layer => layer.title === 'Cartographic base layers') as __esri.GroupLayer;
             realisticBasemap = view.map.layers.find(layer => layer.title === 'Realistic base layers') as __esri.GroupLayer;
             dispatch(initializeViewEventListeners());
-            addBikeFeedToMap(view);
+            initializeBikeFeed(view);
             initializeStations(view);
             const basemapListener = { actionCreator: toggleBasemap, effect: updateBasemap };
             unsubscribeListeners.push(listenerMiddleware.startListening(basemapListener));
