@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setInfoModalOptions } from '../../store/modalSlice';
+import Section from '../Section';
+import BikeTripsStatistics from '../BikeTripsStatistics';
 
 const BottomPanel = () => {
   const [visible, setVisible] = useState(true);
@@ -46,7 +48,19 @@ const BottomPanel = () => {
     <div className={styles.container}>
       {getHeader()}
       <motion.div layout='size' animate={{ height: visible ? 'auto' : 0 }} style={{ overflow: 'hidden' }}>
-        Some menu goes here
+        <div className={styles.dashboardContainer}>
+          <div style={{ gridArea: 'bikes' }}>
+            <Section title='bike trips'>
+              <BikeTripsStatistics></BikeTripsStatistics>
+            </Section>
+          </div>
+          <div style={{ gridArea: 'stations' }}>
+            <Section title='stations'></Section>
+          </div>
+          <div style={{ gridArea: 'accidents' }}>
+            <Section title='accidents'></Section>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

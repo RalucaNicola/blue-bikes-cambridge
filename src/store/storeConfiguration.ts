@@ -4,13 +4,15 @@ import errorReducer from './errorSlice';
 import authenticationReducer from './authenticationSlice';
 import modalOptionsReducer from './modalSlice';
 import basemapReducer from './basemapSlice';
+import bikeTripsReducer from './bikeTripsSlice';
 
 const rootReducer = combineReducers({
   basemapType: basemapReducer,
   authentication: authenticationReducer,
   error: errorReducer,
   loading: loadingReducer,
-  infoModal: modalOptionsReducer
+  infoModal: modalOptionsReducer,
+  bikeTrips: bikeTripsReducer
 });
 
 export const listenerMiddleware = createListenerMiddleware();

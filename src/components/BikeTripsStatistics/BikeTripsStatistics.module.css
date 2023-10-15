@@ -1,0 +1,10 @@
+.container {
+  text-align: center;
+}
+
+.tripCount {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--calcite-ui-brand);
+  line-height: 3rem;
+}

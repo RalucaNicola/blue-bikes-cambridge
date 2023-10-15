@@ -37,9 +37,15 @@
   align-items: center;
 }
 
-.selectedCountry {
-  color: var(--calcite-ui-brand);
-  font-weight: bold;
+.dashboardContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: 'bikes stations accidents';
+  column-gap: 2rem;
+  max-width: min(900px, 80%);
+  margin: 0 auto;
+  height: 100%;
 }
 
 @media (max-width: 700px) {

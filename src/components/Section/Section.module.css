@@ -1,0 +1,30 @@
+.container {
+  margin: 10px 5px;
+}
+
+.title {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+.front {
+  width: 10px;
+}
+.back {
+  flex-grow: 1;
+}
+.front,
+.back {
+  height: 0;
+  border-bottom: 1px solid var(--calcite-ui-text-1);
+}
+
+.title h3 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.8rem;
+  font-weight: normal;
+  margin: 5px 0;
+}
