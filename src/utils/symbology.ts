@@ -4,7 +4,8 @@ import { FillSymbol3DLayer, IconSymbol3DLayer, MeshSymbol3D, PointSymbol3D, Text
 import { formatNumber } from "./utilities";
 
 export const bikeColor = new Color("#03a9fc");
-
+export const overflowColor = new Color("#ff9800");
+export const dockingColor = new Color("#22e078");
 export const bikeFeedRenderer = new SimpleRenderer({
     symbol: new PointSymbol3D({
         symbolLayers: [new IconSymbol3DLayer({
@@ -33,13 +34,11 @@ export const getLabelSymbol = (date: number, label: number) => {
             new TextSymbol3DLayer({
                 material: { color: [255, 255, 255] },
                 background: {
-                    color: [bikeColor.r, bikeColor.g, bikeColor.b, 0.3]
+                    color: [50, 50, 50, 0.6]
                 },
-                font: {
-                    weight: "bold",
-                },
-                size: 9,
-                text: `${formatNumber(Math.floor(label))} - ${text}`
+                size: 7,
+                //text: `${formatNumber(Math.floor(label))} - ${text}`
+                text: `${formatNumber(Math.floor(label))}`
             }),
         ],
         verticalOffset: {
@@ -50,7 +49,7 @@ export const getLabelSymbol = (date: number, label: number) => {
         callout: {
             type: "line",
             size: 0.5,
-            color: bikeColor,
+            color: [50, 50, 50, 0.6],
             border: {
                 color: [0, 0, 0, 0],
             },

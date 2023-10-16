@@ -6,13 +6,15 @@ import { Point } from "@arcgis/core/geometry";
 import Mesh from "@arcgis/core/geometry/Mesh";
 import Graphic from "@arcgis/core/Graphic";
 import MeshMaterialMetallicRoughness from "@arcgis/core/geometry/support/MeshMaterialMetallicRoughness";
-import { barSymbol, bikeColor, getLabelSymbol } from "../../utils/symbology";
+import { barSymbol, bikeColor, dockingColor, getLabelSymbol, overflowColor } from "../../utils/symbology";
+import Color from "@arcgis/core/Color";
 
 const stationFeed = new StreamLayer({
     url: "https://us-iot.arcgis.com/d8avj4l9dv7mdfsa/d8avj4l9dv7mdfsa/streams/arcgis/rest/services/station_bike_capacity_0720/StreamServer",
 });
 
-const capacityBarsLayer = new GraphicsLayer();
+const bikeBarsLayer = new GraphicsLayer({ elevationInfo: { mode: "relative-to-scene" } });
+const dockingBarsLayer = new GraphicsLayer({ elevationInfo: { mode: "relative-to-scene" } });
 const labelsLayer = new GraphicsLayer();
 let connection: __esri.StreamConnection = null;
 
@@ -56,7 +58,7 @@ const getSizeFromValue = (value: number) => {
     return stops[stops.length - 1].size;
 }
 
-const getGeometry = (origin: Point, size: number, color: __esri.Color) => {
+const getGeometry = (origin: Point, size: number, color: __esri.Color, gradient: boolean) => {
     const geometry = Mesh.createCylinder(origin, {
         size: { height: 1, width: 15, depth: 15 },
         //@ts-ignore
@@ -69,8 +71,8 @@ const getGeometry = (origin: Point, size: number, color: __esri.Color) => {
         emissiveColor: [color.r, color.g, color.b],
     });
     const coordinateColors = [];
-    const topColor = [30, 30, 30, 255];
-    const baseColor = [255, 255, 255, 50];
+    const topColor = gradient ? [30, 30, 30, 255] : [30, 30, 30, 150];
+    const baseColor = gradient ? [255, 255, 255, 50] : [30, 30, 30, 150];
 
     const vertexNo = geometry.vertexAttributes.position.length / 3;
 
@@ -87,15 +89,19 @@ const getGeometry = (origin: Point, size: number, color: __esri.Color) => {
     return geometry;
 };
 
-const addBarGraphic = (originPoint: __esri.Point, size: number, station: StationInformation) => {
-    capacityBarsLayer.graphics.push(new Graphic({
-        geometry: getGeometry(originPoint, size, bikeColor),
+const addBarGraphic = (originPoint: __esri.Point, size: number, station: StationInformation, layer: GraphicsLayer, color: Color, gradient: boolean) => {
+    const graphic = new Graphic({
+        geometry: getGeometry(originPoint, size, color, gradient),
         attributes: {
             ...station,
             size
         },
         symbol: barSymbol
-    }));
+    });
+    if (!gradient) {
+        graphic.visible = false;
+    }
+    layer.graphics.push(graphic);
 }
 
 const addLabelGraphic = (origin: Point, size: number, station: StationInformation) => {
@@ -109,7 +115,8 @@ const addLabelGraphic = (origin: Point, size: number, station: StationInformatio
             },
         }),
         attributes: {
-            station_id: station.station_id
+            station_id: station.station_id,
+            capacity: station.capacity,
         },
         symbol: getLabelSymbol(0, station.capacity)
     });
@@ -135,40 +142,74 @@ const createGraphics = (stations: DataArray) => {
                 wkid: 4326,
             },
         });
-        const size = getSizeFromValue(stationInformation.capacity);
-        addBarGraphic(originPoint, size, stationInformation);
-        addLabelGraphic(originPoint, size, stationInformation);
+        const bikeSize = getSizeFromValue(stationInformation.capacity);
+        addBarGraphic(originPoint, bikeSize, stationInformation, bikeBarsLayer, bikeColor, true);
+        addBarGraphic(originPoint, 0, stationInformation, dockingBarsLayer, dockingColor, false);
+        addLabelGraphic(originPoint, bikeSize, stationInformation);
     });
 }
 
 export const initializeStations = async (view: __esri.SceneView) => {
-    view.map.addMany([capacityBarsLayer, labelsLayer]);
+    view.map.addMany([bikeBarsLayer, dockingBarsLayer, labelsLayer]);
     const stations = await fetchStationsData();
     createGraphics(stations);
     initializeStationFeed();
 }
 
 export const destroyStations = (view: __esri.SceneView) => {
-    view.map.removeMany([capacityBarsLayer, labelsLayer]);
+    view.map.removeMany([
+        bikeBarsLayer,
+        dockingBarsLayer
+        //labelsLayer
+    ]);
     stopStationFeed();
 }
 
-const updateBarGraphic = (feature: __esri.Graphic) => {
-    const graphic = capacityBarsLayer.graphics.find(graphic => {
-        return graphic.attributes.station_id === feature.attributes.station_id;
+const updateBarGraphics = (feature: __esri.Graphic) => {
+    const { station_id, current_capacity } = feature.attributes;
+    const bikeGraphic = bikeBarsLayer.graphics.find(graphic => {
+        return graphic.attributes.station_id === station_id;
     });
-    const nextSize = getSizeFromValue(feature.attributes.current_capacity);
-    (graphic.geometry as Mesh).transform.scale = [1, 1, nextSize];
-    //@ts-ignore
-    graphic.notifyMeshTransformChanged({ action: 0 });
+    const { capacity } = bikeGraphic.attributes;
+    const bikeHeight = getSizeFromValue(current_capacity);
+    (bikeGraphic.geometry as Mesh).transform.scale = [1, 1, bikeHeight];
+    if (current_capacity > capacity) {
+        (bikeGraphic.geometry as Mesh).components[0].material = new MeshMaterialMetallicRoughness({
+            emissiveColor: [overflowColor.r, overflowColor.g, overflowColor.b],
+        });
+    } else {
+        (bikeGraphic.geometry as Mesh).components[0].material = new MeshMaterialMetallicRoughness({
+            emissiveColor: [bikeColor.r, bikeColor.g, bikeColor.b],
+        });
+    }
+    const newBikeGeometry = bikeGraphic.geometry.clone();
+    bikeGraphic.geometry = newBikeGeometry;
+
+    const dockingGraphic = dockingBarsLayer.graphics.find(graphic => {
+        return graphic.attributes.station_id === station_id;
+    });
+    if (current_capacity >= capacity) {
+        //(dockingGraphic.geometry as Mesh).transform.scale = [1, 1, 0];
+        dockingGraphic.visible = false;
+    } else {
+        const dockingHeight = getSizeFromValue(capacity - current_capacity);
+        (dockingGraphic.geometry as Mesh).transform.scale = [1, 1, dockingHeight];
+        (dockingGraphic.geometry as Mesh).transform.translation = [0, 0, bikeHeight];
+        const newDockingGeometry = dockingGraphic.geometry.clone();
+        dockingGraphic.geometry = newDockingGeometry;
+        dockingGraphic.visible = true;
+    }
+
 }
 
 const updateLabelGraphic = (feature: __esri.Graphic) => {
+    const { current_capacity, time, station_id } = feature.attributes;
     const graphic = labelsLayer.graphics.find(graphic => {
-        return graphic.attributes.station_id === feature.attributes.station_id;
+        return graphic.attributes.station_id === station_id;
     });
-    graphic.symbol = getLabelSymbol(feature.attributes.time, feature.attributes.current_capacity);
-    (graphic.geometry as Point).z = getSizeFromValue(feature.attributes.current_capacity);
+    graphic.symbol = getLabelSymbol(time, current_capacity);
+    const value = Math.max(current_capacity, graphic.attributes.capacity);
+    (graphic.geometry as Point).z = getSizeFromValue(value);
 }
 
 const initializeStationFeed = async () => {
@@ -183,7 +224,7 @@ const initializeStationFeed = async () => {
     // create a graphic from the JSON object returned and add them to view
     //@ts-ignore
     connection.on("data-received", (feature) => {
-        updateBarGraphic(feature);
+        updateBarGraphics(feature);
         updateLabelGraphic(feature);
     });
 

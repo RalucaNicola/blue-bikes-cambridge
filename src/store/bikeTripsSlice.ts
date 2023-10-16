@@ -13,7 +13,6 @@ const bikeTripsSlice = createSlice({
     initialState,
     reducers: {
         setBikeTripsCount(state, param: PayloadAction<number>) {
-            console.log("Changing current count in state", param.payload);
             state.currentCount = param.payload;
         }
     }

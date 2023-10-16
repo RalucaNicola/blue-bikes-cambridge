@@ -36,7 +36,6 @@ export function destroyView() {
 
 const updateBasemap = () => {
     const cartographic = (store.getState() as RootState).basemapType.cartographic;
-    console.log("toggled basemap", cartographic);
     realisticBasemap.visible = !cartographic;
     cartographicBasemap.visible = cartographic;
 }
