@@ -5,6 +5,7 @@ import authenticationReducer from './authenticationSlice';
 import modalOptionsReducer from './modalSlice';
 import basemapReducer from './basemapSlice';
 import bikeTripsReducer from './bikeTripsSlice';
+import stationsReducer from './stationsSlice';
 
 const rootReducer = combineReducers({
   basemapType: basemapReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   error: errorReducer,
   loading: loadingReducer,
   infoModal: modalOptionsReducer,
-  bikeTrips: bikeTripsReducer
+  bikeTrips: bikeTripsReducer,
+  stations: stationsReducer
 });
 
 export const listenerMiddleware = createListenerMiddleware();

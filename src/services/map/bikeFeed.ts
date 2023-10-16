@@ -12,7 +12,6 @@ const bikeFeed = new StreamLayer({
         mode: "relative-to-scene"
     },
     renderer: bikeFeedRenderer,
-    updateInterval: 2000,
     purgeOptions: {
         ageReceived: 1
     },
@@ -48,7 +47,6 @@ let bikeFeedLayerView: __esri.StreamLayerView = null;
 
 
 export const initializeBikeFeed = (view: __esri.SceneView) => async (dispatch: AppDispatch) => {
-    console.log(crypto.getRandomValues(new Uint32Array(1))[0]);
     addBikeFeedToMap(view);
     bikeFeedLayerView = await view.whenLayerView(bikeFeed);
     const updateBikeTripsCount = debounce(() => {

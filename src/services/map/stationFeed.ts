@@ -8,6 +8,8 @@ import Graphic from "@arcgis/core/Graphic";
 import MeshMaterialMetallicRoughness from "@arcgis/core/geometry/support/MeshMaterialMetallicRoughness";
 import { barSymbol, bikeColor, dockingColor, getLabelSymbol, overflowColor } from "../../utils/symbology";
 import Color from "@arcgis/core/Color";
+import { addNotifyingStation, removeNotifyingStation } from "../../store/stationsSlice";
+import { store } from "../../store/storeConfiguration";
 
 const stationFeed = new StreamLayer({
     url: "https://us-iot.arcgis.com/d8avj4l9dv7mdfsa/d8avj4l9dv7mdfsa/streams/arcgis/rest/services/station_bike_capacity_0720/StreamServer",
@@ -19,7 +21,7 @@ const labelsLayer = new GraphicsLayer();
 let connection: __esri.StreamConnection = null;
 
 type DataArray = DSVRowArray<string>;
-type StationInformation = {
+export type StationInformation = {
     station_id: string,
     has_kiosk: boolean,
     capacity: number,
@@ -215,20 +217,25 @@ const updateLabelGraphic = (feature: __esri.Graphic) => {
 const initializeStationFeed = async () => {
     console.log("station feed initialized");
 
-    // get layer's connection configurations
     const parameters = stationFeed.createConnectionParameters();
-
     const connection = await stationFeed.connect(parameters);
-
-    // listen to date-received event once the connection is established
-    // create a graphic from the JSON object returned and add them to view
     //@ts-ignore
     connection.on("data-received", (feature) => {
         updateBarGraphics(feature);
         updateLabelGraphic(feature);
+        const { current_capacity, time, station_id, total_capacity } = feature.attributes;
+        const bikeGraphic = bikeBarsLayer.graphics.find(graphic => {
+            return graphic.attributes.station_id === station_id;
+        });
+
+        const attributes = { ...bikeGraphic.attributes, current_capacity, time }
+        if ((current_capacity > total_capacity) || (current_capacity < 0)) {
+            store.dispatch(addNotifyingStation(attributes));
+        } else {
+            store.dispatch(removeNotifyingStation(attributes));
+        }
+
     });
-
-
 }
 
 const stopStationFeed = () => {

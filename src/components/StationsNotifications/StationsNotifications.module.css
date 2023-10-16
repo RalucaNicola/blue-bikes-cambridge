@@ -1,0 +1,13 @@
+.container {
+  height: 150px;
+  overflow: auto;
+}
+
+.notificationCard {
+  background-color: rgb(255, 217, 0, 0.2);
+  border-radius: var(--border-radius);
+  border: 1px solid rgb(255, 217, 0);
+  padding: 10px;
+  margin: 10px;
+  cursor: pointer;
+}
