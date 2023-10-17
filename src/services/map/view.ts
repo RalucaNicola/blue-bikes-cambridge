@@ -10,9 +10,8 @@ import SceneView from '@arcgis/core/views/SceneView';
 import { initializeBikeFeed, removeBikeFeedFromMap } from './bikeFeed';
 import { destroyStations, initializeStations } from './stationFeed';
 import { toggleBasemap } from '../../store/basemapSlice';
-import { PayloadAction, UnsubscribeListener } from '@reduxjs/toolkit';
-import { useAppSelector } from '../../hooks/useAppSelector';
-import { useStore } from 'react-redux';
+import { UnsubscribeListener } from '@reduxjs/toolkit';
+import { initializeAccidentsLayer } from './accidentsLayer';
 
 let view: __esri.SceneView = null;
 let cartographicBasemap: __esri.GroupLayer = null;
@@ -83,6 +82,7 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
             dispatch(initializeViewEventListeners());
             dispatch(initializeBikeFeed(view));
             initializeStations(view);
+            initializeAccidentsLayer(view);
             const basemapListener = { actionCreator: toggleBasemap, effect: updateBasemap };
             unsubscribeListeners.push(listenerMiddleware.startListening(basemapListener));
         });
