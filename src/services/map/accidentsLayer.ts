@@ -12,8 +12,8 @@ const updateVisibility = () => {
 
 export const initializeAccidentsLayer = (view: __esri.SceneView) => {
     accidentsLayer = view.map.findLayerById("18b3d880f26-layer-83") as __esri.FeatureLayer;
-    const basemapListener = { actionCreator: toggleAccidentsLayer, effect: updateVisibility };
-    unsubscribeListeners.push(listenerMiddleware.startListening(basemapListener));
+    const accidentsVisibilityListener = { actionCreator: toggleAccidentsLayer, effect: updateVisibility };
+    unsubscribeListeners.push(listenerMiddleware.startListening(accidentsVisibilityListener));
 }
 
 export const removeAccidentsListeners = () => {
