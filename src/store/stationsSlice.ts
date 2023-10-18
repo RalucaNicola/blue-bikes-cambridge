@@ -1,7 +1,7 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { StationInformation } from '../services/map/stationFeed';
 
-interface RealTimeStationInformation extends StationInformation {
+export interface RealTimeStationInformation extends StationInformation {
     time: Date;
     current_capacity: number;
 }

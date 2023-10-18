@@ -1,0 +1,44 @@
+.container {
+  composes: background from '../../utils/utils.module.css';
+  height: 30%;
+  width: min(50%, 300px);
+  position: absolute;
+  right: var(--margin);
+  top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.header h1 {
+  color: white;
+  font-size: 1rem;
+  padding-left: 10px;
+}
+
+.content {
+  overflow: auto;
+  flex: 1;
+}
+
+.chartContainer {
+  height: 300px;
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .container {
+    right: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: revert;
+    height: revert;
+  }
+}

@@ -8,12 +8,15 @@ import Graphic from "@arcgis/core/Graphic";
 import MeshMaterialMetallicRoughness from "@arcgis/core/geometry/support/MeshMaterialMetallicRoughness";
 import { barSymbol, bikeColor, dockingColor, getLabelSymbol, overflowColor } from "../../utils/symbology";
 import Color from "@arcgis/core/Color";
-import { addNotifyingStation, removeNotifyingStation } from "../../store/stationsSlice";
-import { store } from "../../store/storeConfiguration";
+import { addNotifyingStation, removeNotifyingStation, setSelectedStation } from "../../store/stationsSlice";
+import { listenerMiddleware, store } from "../../store/storeConfiguration";
+import { PayloadAction, UnsubscribeListener } from "@reduxjs/toolkit";
 
 const stationFeed = new StreamLayer({
     url: "https://us-iot.arcgis.com/d8avj4l9dv7mdfsa/d8avj4l9dv7mdfsa/streams/arcgis/rest/services/station_bike_capacity_0720/StreamServer",
 });
+
+const unsubscribeListeners: UnsubscribeListener[] = [];
 
 const bikeBarsLayer = new GraphicsLayer({ elevationInfo: { mode: "relative-to-scene" } });
 const dockingBarsLayer = new GraphicsLayer({ elevationInfo: { mode: "relative-to-scene" } });
@@ -151,11 +154,28 @@ const createGraphics = (stations: DataArray) => {
     });
 }
 
+
+
 export const initializeStations = async (view: __esri.SceneView) => {
     view.map.addMany([bikeBarsLayer, dockingBarsLayer, labelsLayer]);
     const stations = await fetchStationsData();
     createGraphics(stations);
     initializeStationFeed();
+
+
+    const zoomToStation = (param: PayloadAction<StationInformation>) => {
+        if (param.payload) {
+            const bikeGraphic = bikeBarsLayer.graphics.find(graphic => {
+                return graphic.attributes.station_id === param.payload.station_id;
+            });
+            const dockingGraphic = dockingBarsLayer.graphics.find(graphic => {
+                return graphic.attributes.station_id === param.payload.station_id;
+            })
+            view.goTo({ target: [bikeGraphic, dockingGraphic] });
+        }
+    }
+    const stationSelectionListener = { actionCreator: setSelectedStation, effect: zoomToStation };
+    unsubscribeListeners.push(listenerMiddleware.startListening(stationSelectionListener));
 }
 
 export const destroyStations = (view: __esri.SceneView) => {

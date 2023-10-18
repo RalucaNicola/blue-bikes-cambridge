@@ -1,5 +1,6 @@
 import BasemapToggle from '../BasemapToggle';
 import BottomPanel from '../BottomPanel';
+import Popup from '../Popup';
 import { ErrorAlert } from '../ErrorAlert';
 import { Identity } from '../Identity';
 import InfoModal from '../InfoModal';
@@ -11,6 +12,7 @@ const App = () => {
       <Map></Map>
       <BasemapToggle></BasemapToggle>
       <BottomPanel></BottomPanel>
+      <Popup></Popup>
       <ErrorAlert></ErrorAlert>
       <Identity></Identity>
       <InfoModal></InfoModal>
