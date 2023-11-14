@@ -1,12 +1,13 @@
 .container {
   composes: background from '../../utils/utils.module.css';
-  height: 30%;
+  max-height: 50%;
   width: min(50%, 300px);
   position: absolute;
   right: var(--margin);
   top: 50px;
   display: flex;
   flex-direction: column;
+  padding: 10px;
 }
 
 .header {

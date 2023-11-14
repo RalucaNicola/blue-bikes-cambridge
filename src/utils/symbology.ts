@@ -26,9 +26,8 @@ export const barSymbol = new MeshSymbol3D({
     ],
 });
 
-export const getLabelSymbol = (date: number, label: number) => {
+export const getLabelSymbol = (label: number) => {
 
-    const text = new Date(date).getHours() + ":" + new Date(date).getMinutes();
     return new PointSymbol3D({
         symbolLayers: [
             new TextSymbol3DLayer({
@@ -37,7 +36,6 @@ export const getLabelSymbol = (date: number, label: number) => {
                     color: [50, 50, 50, 0.6]
                 },
                 size: 7,
-                //text: `${formatNumber(Math.floor(label))} - ${text}`
                 text: `${formatNumber(Math.floor(label))}`
             }),
         ],

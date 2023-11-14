@@ -1,4 +1,4 @@
-import { CalciteAction, CalciteLoader } from '@esri/calcite-components-react';
+import { CalciteAction, CalciteIcon, CalciteLabel, CalciteLoader } from '@esri/calcite-components-react';
 import * as styles from './Popup.module.css';
 import { motion } from 'framer-motion';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
@@ -7,9 +7,11 @@ import { RootState } from '../../store/storeConfiguration';
 import Section from '../Section';
 import { roundNumber } from '../../utils/utilities';
 import { Point } from '@arcgis/core/geometry';
-import { RealTimeStationInformation, setSelectedStation } from '../../store/stationsSlice';
+import { setSelectedStation } from '../../store/stationsSlice';
+import { StationInformation } from '../../services/map/streamMock';
+import { Counts } from '../Counts';
 
-const getHeaderForSelectedStation = (selectedStation: RealTimeStationInformation): string => {
+const getHeaderForSelectedStation = (selectedStation: StationInformation): string => {
   return selectedStation.name;
 };
 
@@ -60,8 +62,28 @@ const Popup = () => {
           </div>
         </div>
         <div className={styles.content}>
-          <Section title='Bycicles'>{selectedStation.current_capacity}</Section>
-          <Section title='Docking stations'>{selectedStation.capacity}</Section>
+          <Section title='Availability'>
+            <div style={{ display: 'flex', fontSize: '0.9rem' }}>
+              <Counts type='bikes' count={selectedStation.bikeCount}></Counts>
+              <Counts type='docks' count={Math.max(0, selectedStation.totalDocks - selectedStation.bikeCount)}></Counts>
+            </div>
+          </Section>
+          <Section title='Rental methods'>
+            <div style={{ display: 'flex', fontSize: '0.9rem', gap: '10px' }}>
+              <CalciteLabel layout='inline'>
+                <CalciteIcon icon='key' scale='m'></CalciteIcon> Key
+              </CalciteLabel>
+
+              <CalciteLabel layout='inline'>
+                <CalciteIcon icon='credit-card' scale='m'></CalciteIcon> Credit card
+              </CalciteLabel>
+            </div>
+            {selectedStation.hasKeyDispenser ? (
+              <div>Has a key dispenser.</div>
+            ) : (
+              <div> Doesn't have a key dispenser.</div>
+            )}
+          </Section>
         </div>
       </motion.div>
     )

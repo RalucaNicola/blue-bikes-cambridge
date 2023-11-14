@@ -1,4 +1,4 @@
-name,short_name,station_id,capacity,has_kiosk,has_key_dispenser,rental_methods,lon,lat
+name,shortName,stationId,totalDocks,hasKiosk,hasKeyDispenser,rentalMethods,lon,lat
 MIT at Mass Ave / Amherst St,M32006,f83493c0-0de8-11e7-991c-3863bb43a7d0,27,True,True,"['CREDITCARD', 'KEY']",-71.093198,42.3581
 Central Square at Mass Ave / Essex St,M32011,f8349440-0de8-11e7-991c-3863bb43a7d0,19,True,True,"['CREDITCARD', 'KEY']",-71.1031,42.36507
 Harvard Kennedy School at Bennett St / Eliot St,M32016,f834952a-0de8-11e7-991c-3863bb43a7d0,23,True,False,"['CREDITCARD', 'KEY']",-71.12188071012497,42.3722168027866

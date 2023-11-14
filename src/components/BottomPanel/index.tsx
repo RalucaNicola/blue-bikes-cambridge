@@ -61,11 +61,11 @@ const BottomPanel = () => {
               <StationsNotifications></StationsNotifications>
             </Section>
           </div>
-          <div style={{ gridArea: 'accidents' }}>
+          {/* <div style={{ gridArea: 'accidents' }}>
             <Section title='accidents'>
               <AccidentsStatistics></AccidentsStatistics>
             </Section>
-          </div>
+          </div> */}
         </div>
       </motion.div>
     </div>

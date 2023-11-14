@@ -5,61 +5,42 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { animate, motion, useAnimation, useMotionValue, useTransform } from 'framer-motion';
 import { setSelectedStation } from '../../store/stationsSlice';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { bikeColor, overflowColor } from '../../utils/symbology';
-import Color from '@arcgis/core/Color';
+import { StationInformation } from '../../services/map/streamMock';
+import { bikeColor, dockingColor } from '../../utils/symbology';
+import { CalciteIcon, CalciteLabel } from '@esri/calcite-components-react';
+import { Counts } from '../Counts';
 
-enum Status {
-  Normal,
-  Overflow,
-  Shortage
-}
-
-const Notification = ({
-  message,
-  onClick,
-  color
-}: {
-  message: string;
-  onClick: React.MouseEventHandler;
-  color: __esri.Color;
-}) => {
+const Notification = ({ station, onClick }: { station: StationInformation; onClick: React.MouseEventHandler }) => {
   return (
     <motion.div
       onClick={onClick}
       className={styles.notificationCard}
-      style={{ backgroundColor: `rgba(${[...color.toRgb(), 0.3].join(',')}`, border: `1px solid ${color}` }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {message}
+      <h4>{station.name}</h4>
+      <div style={{ display: 'flex', fontSize: '0.9rem' }}>
+        <Counts type='bikes' count={station.bikeCount}></Counts>
+        <Counts type='docks' count={Math.max(0, station.totalDocks - station.bikeCount)}></Counts>
+      </div>
     </motion.div>
   );
 };
 
 const StationsNotifications = () => {
-  const notifyingStations = useAppSelector((state: RootState) => state.stations.notifyingStations);
+  const stations = useAppSelector((state: RootState) => state.stations.stations);
   const dispatch = useAppDispatch();
   return (
     <div className={styles.container}>
-      {notifyingStations.map((station) => {
-        let status = Status.Overflow;
-        if (station.current_capacity < 5) {
-          status = Status.Shortage;
-        }
-        const color = status === Status.Shortage ? new Color('red') : overflowColor;
-        const message =
-          status === Status.Shortage
-            ? `Station ${station.name} should be stocked up.`
-            : `Station ${station.name} is overstocked.`;
+      {stations.map((station) => {
         return (
           <Notification
-            message={message}
-            key={station.station_id}
+            station={station}
+            key={station.stationID}
             onClick={() => {
               dispatch(setSelectedStation(station));
             }}
-            color={color}
           ></Notification>
         );
       })}

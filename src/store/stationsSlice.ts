@@ -1,18 +1,13 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { StationInformation } from '../services/map/stationFeed';
-
-export interface RealTimeStationInformation extends StationInformation {
-    time: Date;
-    current_capacity: number;
-}
+import { StationInformation } from '../services/map/streamMock';
 
 export interface StationsSlice {
-    notifyingStations: Array<RealTimeStationInformation>;
-    selectedStation: RealTimeStationInformation;
+    stations: Array<StationInformation>;
+    selectedStation: StationInformation;
 }
 
 const initialState: StationsSlice = {
-    notifyingStations: [],
+    stations: [],
     selectedStation: null
 };
 
@@ -20,23 +15,24 @@ const stationsSlice = createSlice({
     name: 'bikeTrips',
     initialState,
     reducers: {
-        addNotifyingStation(state, param: PayloadAction<RealTimeStationInformation>) {
-            const index = state.notifyingStations.findIndex(station => station.station_id === param.payload.station_id);
-            if (index === -1) {
-                state.notifyingStations = [...state.notifyingStations, param.payload];
-            }
+        setStations(state, param: PayloadAction<Array<StationInformation>>) {
+            console.log("stations are", param.payload)
+            state.stations = param.payload;
         },
-        removeNotifyingStation(state, param: PayloadAction<RealTimeStationInformation>) {
-            const index = state.notifyingStations.findIndex(station => station.station_id === param.payload.station_id);
-            if (index !== -1) {
-                state.notifyingStations = state.notifyingStations.splice(index, 1);
-            }
+        updateStation(state, param: PayloadAction<StationInformation>) {
+            console.log("updating station", param.payload);
+            state.stations = state.stations.map(station => {
+                if (station.stationID === param.payload.stationID) {
+                    return param.payload;
+                }
+                return station;
+            });
         },
-        setSelectedStation(state, param: PayloadAction<RealTimeStationInformation>) {
+        setSelectedStation(state, param: PayloadAction<StationInformation>) {
             state.selectedStation = param.payload;
         }
     }
 });
 
-export const { addNotifyingStation, removeNotifyingStation, setSelectedStation } = stationsSlice.actions;
+export const { setStations, updateStation, setSelectedStation } = stationsSlice.actions;
 export default stationsSlice.reducer;

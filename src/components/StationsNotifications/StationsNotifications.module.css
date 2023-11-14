@@ -4,10 +4,29 @@
 }
 
 .notificationCard {
-  background-color: rgb(255, 217, 0, 0.2);
+  background-color: rgb(50, 50, 50, 0.2);
   border-radius: var(--border-radius);
-  border: 1px solid rgb(255, 217, 0);
+  border: 1px solid rgb(50, 50, 50);
   padding: 10px;
   margin: 10px;
   cursor: pointer;
+}
+
+.count {
+  border-left: 10px solid;
+  padding: 0px 5px;
+  margin: 5px;
+}
+
+.notificationCard:hover {
+  background-color: rgb(50, 50, 50, 0.4);
+}
+
+.notificationCard h3 {
+  padding: 4px 0;
+  margin: 0;
+}
+.notificationCard h4 {
+  padding: 2px 0;
+  margin: 0;
 }

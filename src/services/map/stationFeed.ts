@@ -13,7 +13,8 @@ import { listenerMiddleware, store } from "../../store/storeConfiguration";
 import { PayloadAction, UnsubscribeListener } from "@reduxjs/toolkit";
 
 const stationFeed = new StreamLayer({
-    url: "https://us-iot.arcgis.com/d8avj4l9dv7mdfsa/d8avj4l9dv7mdfsa/streams/arcgis/rest/services/station_bike_capacity_0720/StreamServer",
+    url: "https://us-iot.arcgis.com/d8avj4l9dv7mdfsa/d8avj4l9dv7mdfsa/streams/arcgis/rest/services/cambridge_stations/StreamServer",
+    // definitionExpression: "Type<>'bike_location'",
 });
 
 const unsubscribeListeners: UnsubscribeListener[] = [];
@@ -24,7 +25,7 @@ const labelsLayer = new GraphicsLayer();
 let connection: __esri.StreamConnection = null;
 
 type DataArray = DSVRowArray<string>;
-export type StationInformation = {
+type StationInformation = {
     station_id: string,
     has_kiosk: boolean,
     capacity: number,
@@ -154,13 +155,11 @@ const createGraphics = (stations: DataArray) => {
     });
 }
 
-
-
 export const initializeStations = async (view: __esri.SceneView) => {
     view.map.addMany([bikeBarsLayer, dockingBarsLayer, labelsLayer]);
     const stations = await fetchStationsData();
     createGraphics(stations);
-    initializeStationFeed();
+    //initializeStationFeed();
 
 
     const zoomToStation = (param: PayloadAction<StationInformation>) => {
@@ -234,27 +233,27 @@ const updateLabelGraphic = (feature: __esri.Graphic) => {
     (graphic.geometry as Point).z = getSizeFromValue(value);
 }
 
-const initializeStationFeed = async () => {
+export const initializeStationFeed = async () => {
     console.log("station feed initialized");
 
     const parameters = stationFeed.createConnectionParameters();
     const connection = await stationFeed.connect(parameters);
     //@ts-ignore
     connection.on("data-received", (feature) => {
-        updateBarGraphics(feature);
-        updateLabelGraphic(feature);
-        const { current_capacity, time, station_id, total_capacity } = feature.attributes;
-        const bikeGraphic = bikeBarsLayer.graphics.find(graphic => {
-            return graphic.attributes.station_id === station_id;
-        });
+        console.log(feature);
+        // updateBarGraphics(feature);
+        // updateLabelGraphic(feature);
+        // const { current_capacity, time, station_id, total_capacity } = feature.attributes;
+        // const bikeGraphic = bikeBarsLayer.graphics.find(graphic => {
+        //     return graphic.attributes.station_id === station_id;
+        // });
 
-        const attributes = { ...bikeGraphic.attributes, current_capacity, time }
-        if ((current_capacity > total_capacity) || (current_capacity < 0)) {
-            store.dispatch(addNotifyingStation(attributes));
-        } else {
-            store.dispatch(removeNotifyingStation(attributes));
-        }
-
+        // const attributes = { ...bikeGraphic.attributes, current_capacity, time }
+        // if ((current_capacity > total_capacity) || (current_capacity < 0)) {
+        //     store.dispatch(addNotifyingStation(attributes));
+        // } else {
+        //     store.dispatch(removeNotifyingStation(attributes));
+        // }
     });
 }
 

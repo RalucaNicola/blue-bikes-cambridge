@@ -8,10 +8,13 @@ import { setError } from '../../store/errorSlice';
 import { initializeViewEventListeners } from './eventListeners';
 import SceneView from '@arcgis/core/views/SceneView';
 import { initializeBikeFeed, removeBikeFeedFromMap } from './bikeFeed';
-import { destroyStations, initializeStations } from './stationFeed';
+import { destroyStations, initializeStationFeed, initializeStations } from './stationFeed';
 import { toggleBasemap } from '../../store/basemapSlice';
 import { UnsubscribeListener } from '@reduxjs/toolkit';
 import { initializeAccidentsLayer } from './accidentsLayer';
+import MapView from '@arcgis/core/views/MapView';
+import WebMap from '@arcgis/core/WebMap';
+import { initializeStreamMock } from './streamMock';
 
 let view: __esri.SceneView = null;
 let cartographicBasemap: __esri.GroupLayer = null;
@@ -50,6 +53,7 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
             portalItem: portalItem
         });
         await webmap.load();
+
         view = new SceneView({
             container: divRef,
             map: webmap,
@@ -80,9 +84,10 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
             cartographicBasemap = view.map.layers.find(layer => layer.title === 'Cartographic base layers') as __esri.GroupLayer;
             realisticBasemap = view.map.layers.find(layer => layer.title === 'Realistic base layers') as __esri.GroupLayer;
             dispatch(initializeViewEventListeners());
-            dispatch(initializeBikeFeed(view));
-            initializeStations(view);
-            initializeAccidentsLayer(view);
+            dispatch(initializeStreamMock(view));
+            // initializeStations(view);
+            //initializeStationFeed();
+            //initializeAccidentsLayer(view);
             const basemapListener = { actionCreator: toggleBasemap, effect: updateBasemap };
             unsubscribeListeners.push(listenerMiddleware.startListening(basemapListener));
         });
