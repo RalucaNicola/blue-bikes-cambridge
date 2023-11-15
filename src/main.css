@@ -9,10 +9,12 @@
   --margin: 15px;
   --background-color: rgba(0 0 0 / 60%);
   --calcite-font-size--1: 0.85rem;
-  --calcite-ui-text-1: rgb(230, 230, 230);
-  --calcite-ui-text-2: rgb(210, 210, 210);
-  --calcite-ui-text-3: rgb(150, 150, 150);
+  --calcite-ui-text-1: rgb(245, 245, 245);
+  --calcite-ui-text-2: rgb(230, 230, 230);
+  --calcite-ui-text-3: rgb(210, 210, 210);
   --calcite-label-margin-bottom: 0;
+  --calcite-ui-foreground-1: transparent;
+  --calcite-ui-border-input: rgb(150, 150, 150);
 }
 
 html,

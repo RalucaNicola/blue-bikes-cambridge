@@ -9,7 +9,7 @@ import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { setInfoModalOptions } from '../../store/modalSlice';
 import Section from '../Section';
 import BikeTripsStatistics from '../BikeTripsStatistics';
-import StationsNotifications from '../StationsNotifications';
+import StationsList from '../StationsList';
 import AccidentsStatistics from '../AccidentsStatistics';
 
 const BottomPanel = () => {
@@ -58,7 +58,7 @@ const BottomPanel = () => {
           </div>
           <div style={{ gridArea: 'stations' }}>
             <Section title='stations'>
-              <StationsNotifications></StationsNotifications>
+              <StationsList></StationsList>
             </Section>
           </div>
           {/* <div style={{ gridArea: 'accidents' }}>

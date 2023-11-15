@@ -1,0 +1,24 @@
+.container {
+  height: 150px;
+  overflow: auto;
+  font-size: 0.9rem;
+}
+
+.stationCard {
+  border-bottom: 1px solid var(--calcite-ui-border-input);
+  padding: 10px;
+  cursor: pointer;
+}
+
+.stationCard:hover {
+  background-color: rgb(50, 50, 50, 0.4);
+}
+
+.stationCard h3 {
+  padding: 4px 0;
+  margin: 0;
+}
+.stationCard h4 {
+  padding: 2px 0;
+  margin: 0;
+}
