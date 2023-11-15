@@ -233,7 +233,6 @@ const updateBarGraphics = (feature: StreamFeature) => {
         return graphic.attributes.stationID === stationID;
     });
     if (bikeCount >= totalDocks) {
-        //(dockingGraphic.geometry as Mesh).transform.scale = [1, 1, 0];
         dockingGraphic.visible = false;
     } else {
         const dockingHeight = getSizeFromValue(totalDocks - bikeCount);
@@ -310,7 +309,7 @@ export const initializeStreamMock = (view: __esri.SceneView) => async (dispatch:
                 let station = stationsInformation.find(station => station.stationID === stationID);
                 dispatch(updateStation({ ...station, bikeCount: feature.attributes.bikeCount }));
             }
-        }, 500);
+        }, 100);
     });
 
     const zoomToStation = (param: PayloadAction<StationInformation>) => {

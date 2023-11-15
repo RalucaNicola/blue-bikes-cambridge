@@ -63,18 +63,18 @@ const Popup = () => {
         </div>
         <div className={styles.content}>
           <Section title='Availability'>
-            <div style={{ display: 'flex', fontSize: '0.9rem' }}>
+            <div style={{ display: 'flex' }}>
               <Counts type='bikes' count={selectedStation.bikeCount}></Counts>
               <Counts type='docks' count={Math.max(0, selectedStation.totalDocks - selectedStation.bikeCount)}></Counts>
             </div>
           </Section>
           <Section title='Rental methods'>
-            <div style={{ display: 'flex', fontSize: '0.9rem', gap: '10px' }}>
-              <CalciteLabel layout='inline'>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <CalciteLabel layout='inline' scale='m'>
                 <CalciteIcon icon='key' scale='m'></CalciteIcon> Key
               </CalciteLabel>
 
-              <CalciteLabel layout='inline'>
+              <CalciteLabel layout='inline' scale='m'>
                 <CalciteIcon icon='credit-card' scale='m'></CalciteIcon> Credit card
               </CalciteLabel>
             </div>

@@ -16,11 +16,9 @@ const stationsSlice = createSlice({
     initialState,
     reducers: {
         setStations(state, param: PayloadAction<Array<StationInformation>>) {
-            console.log("stations are", param.payload)
             state.stations = param.payload;
         },
         updateStation(state, param: PayloadAction<StationInformation>) {
-            console.log("updating station", param.payload);
             state.stations = state.stations.map(station => {
                 if (station.stationID === param.payload.stationID) {
                     return param.payload;

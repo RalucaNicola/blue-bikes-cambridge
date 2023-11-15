@@ -5,13 +5,13 @@ export const Counts = ({ type, count }: { type: string; count: number }) => {
   if (type === 'bikes') {
     return (
       <div className={styles.count} style={{ borderColor: bikeColor.toHex() }}>
-        {count} bicycles
+        {count} bicycle{count !== 1 ? 's' : ''}
       </div>
     );
   } else if (type === 'docks') {
     return (
       <div className={styles.count} style={{ borderColor: dockingColor.toHex() }}>
-        {count} docking stations
+        {count} docking station{count !== 1 ? 's' : ''}
       </div>
     );
   }
