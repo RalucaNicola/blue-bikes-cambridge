@@ -26,7 +26,6 @@ body,
   width: 100%;
   font-family: var(--calcite-sans-family);
   color: var(--calcite-ui-text-1);
-  background: var(--background-color);
 }
 
 a {

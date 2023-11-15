@@ -320,7 +320,7 @@ export const initializeStreamMock = (view: __esri.SceneView) => async (dispatch:
             const dockingGraphic = dockingStations.graphics.find(graphic => {
                 return graphic.attributes.stationID === param.payload.stationID;
             })
-            view.goTo({ target: [bikeGraphic, dockingGraphic], zoom: 17 });
+            view.goTo({ target: [bikeGraphic, dockingGraphic], zoom: 19 });
         }
     }
 

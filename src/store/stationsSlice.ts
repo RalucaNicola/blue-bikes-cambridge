@@ -27,7 +27,12 @@ const stationsSlice = createSlice({
             });
         },
         setSelectedStation(state, param: PayloadAction<StationInformation>) {
-            state.selectedStation = state.stations.find(station => station.stationID === param.payload.stationID);
+            if (param.payload) {
+                state.selectedStation = state.stations.find(station => station.stationID === param.payload.stationID);
+            }
+            else {
+                state.selectedStation = param.payload;
+            }
         }
     }
 });
