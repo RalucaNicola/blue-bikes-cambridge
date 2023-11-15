@@ -11,34 +11,6 @@ import { bikeColor, dockingColor } from '../../utils/symbology';
 import { CalciteFilter, CalciteIcon, CalciteLabel } from '@esri/calcite-components-react';
 import { Counts } from '../Counts';
 
-const StationListItem = ({
-  station,
-  key,
-  onClick
-}: {
-  station: StationInformation;
-  key: string;
-  onClick: React.MouseEventHandler;
-}) => {
-  return (
-    <motion.div
-      key={key}
-      onClick={onClick}
-      className={styles.stationCard}
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      <h4>{station.name}</h4>
-      <div style={{ display: 'flex', fontSize: '0.9rem' }}>
-        <Counts type='bikes' count={station.bikeCount}></Counts>
-        <Counts type='docks' count={Math.max(0, station.totalDocks - station.bikeCount)}></Counts>
-      </div>
-    </motion.div>
-  );
-};
-
 const StationsList = () => {
   const stations = useAppSelector((state: RootState) => state.stations.stations);
   const dispatch = useAppDispatch();
@@ -51,22 +23,32 @@ const StationsList = () => {
     <>
       <CalciteFilter
         onCalciteFilterChange={(evt) => {
-          console.log(evt.target.value);
           setFilter(evt.target.value);
         }}
         items={stations}
       ></CalciteFilter>
       <div className={styles.container}>
-        <AnimatePresence>
+        <AnimatePresence mode='popLayout'>
           {filteredStations.map((station) => {
             return (
-              <StationListItem
-                station={station}
+              <motion.div
                 key={station.stationID}
                 onClick={() => {
                   dispatch(setSelectedStation(station));
                 }}
-              ></StationListItem>
+                className={styles.stationCard}
+                layout='position'
+                //initial={{ scale: 1, opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <h4>{station.name}</h4>
+                <div style={{ display: 'flex', fontSize: '0.9rem' }}>
+                  <Counts type='bikes' count={station.bikeCount}></Counts>
+                  <Counts type='docks' count={Math.max(0, station.totalDocks - station.bikeCount)}></Counts>
+                </div>
+              </motion.div>
             );
           })}
         </AnimatePresence>

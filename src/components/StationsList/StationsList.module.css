@@ -1,6 +1,7 @@
 .container {
   height: 150px;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   font-size: 0.9rem;
 }
 
