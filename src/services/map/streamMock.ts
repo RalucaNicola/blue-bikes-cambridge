@@ -320,9 +320,34 @@ export const initializeStreamMock = (view: __esri.SceneView) => async (dispatch:
             const dockingGraphic = dockingStations.graphics.find(graphic => {
                 return graphic.attributes.stationID === param.payload.stationID;
             })
-            view.goTo({ target: [bikeGraphic, dockingGraphic] });
+            view.goTo({ target: [bikeGraphic, dockingGraphic], zoom: 17 });
         }
     }
+
+    view.on('click', (event) => {
+        view.hitTest(event, { include: [bikeStations, dockingStations, labelsStations] }).then((response) => {
+            const results = response.results as Array<__esri.GraphicHit>;
+            if (results.length > 0 && results[0].graphic) {
+                const station = stationsInformation.find(station => {
+                    return station.stationID === results[0].graphic.attributes.stationID;
+                });
+                dispatch(setSelectedStation(station));
+            }
+        });
+    });
+
+    view.on('pointer-move', (event) => {
+        view.hitTest(event, { include: [bikeStations, dockingStations, labelsStations] }).then((response) => {
+            const results = response.results as Array<__esri.GraphicHit>;
+            if (results.length > 0 && results[0].graphic) {
+                // change cursor to pointer
+                view.container.style.cursor = "pointer";
+            } else {
+                // change cursor to default
+                view.container.style.cursor = "default";
+            }
+        });
+    })
     const stationSelectionListener = { actionCreator: setSelectedStation, effect: zoomToStation };
     unsubscribeListeners.push(listenerMiddleware.startListening(stationSelectionListener));
 
