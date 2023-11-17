@@ -12,12 +12,13 @@ const AccidentsStatistics = () => {
   return (
     <div className={styles.container}>
       <CalciteLabel layout='inline-space-between' scale='l'>
-        See historical accident data{' '}
+        Bicycle accidents{' '}
         <CalciteSwitch
           checked={accidentsVisible ? true : undefined}
           onCalciteSwitchChange={() => dispatch(toggleAccidentsLayer())}
         ></CalciteSwitch>
       </CalciteLabel>
+      <div className={styles.note}>Historical accident data from January 2015 until October 2023.</div>
     </div>
   );
 };

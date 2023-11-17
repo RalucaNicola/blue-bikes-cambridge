@@ -13,7 +13,7 @@
   --calcite-ui-text-2: rgb(230, 230, 230);
   --calcite-ui-text-3: rgb(210, 210, 210);
   --calcite-label-margin-bottom: 0;
-  --calcite-ui-foreground-1: transparent;
+  --calcite-ui-foreground-1: rgba(50, 50, 50, 0.3);
   --calcite-ui-border-input: rgb(150, 150, 150);
 }
 
@@ -29,19 +29,23 @@ body,
 }
 
 a {
-  color: var(--calcite-ui-text-3);
-  text-decoration: none;
+  color: var(--calcite-ui-text-1);
+  transition: all 300ms ease-in-out;
 }
 
 a:hover {
-  color: var(--calcite-ui-text-1);
+  color: var(--calcite-ui-brand);
 }
 
+/* .esri-popup__main-container {
+  background-color: transparent !important;
+} */
+/* 
 .esri-widget {
   background-color: var(--background-color) !important;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-}
+} */
 
 /* remove outline from map */
 /* .esri-view .esri-view-surface--inset-outline:focus::after {

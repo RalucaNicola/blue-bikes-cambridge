@@ -61,14 +61,13 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
                 components: ["zoom"]
             },
             popup: {
-                dockEnabled: true,
+                dockEnabled: false,
                 dockOptions: {
                     buttonEnabled: false,
                     breakpoint: false
                 },
                 highlightEnabled: false,
-                defaultPopupTemplateEnabled: false,
-                autoOpenEnabled: false
+                defaultPopupTemplateEnabled: false
             }
         });
         view.popup.defaultPopupTemplateEnabled = true;

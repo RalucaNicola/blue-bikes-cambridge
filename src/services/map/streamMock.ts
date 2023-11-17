@@ -62,7 +62,7 @@ const fetchCSV = async (dataUrl: string) => {
 const bikeStreamLayer = new StreamLayer({
     objectIdField: 'objectID',
     purgeOptions: {
-        ageReceived: 1,
+        ageReceived: 0.5,
     },
     fields: [
         {
@@ -133,7 +133,7 @@ const getSizeFromValue = (value: number) => {
     return stops[stops.length - 1].size;
 }
 
-const getGeometry = (origin: Point, size: number, color: __esri.Color, gradient: boolean) => {
+const getGeometry = (origin: Point, originHeight: number, size: number, color: __esri.Color, gradient: boolean) => {
     const geometry = Mesh.createCylinder(origin, {
         size: { height: 1, width: 15, depth: 15 },
         //@ts-ignore
@@ -142,6 +142,7 @@ const getGeometry = (origin: Point, size: number, color: __esri.Color, gradient:
         densificationFactor: 2,
     });
     geometry.transform.scale = [1, 1, size];
+    geometry.transform.translation = [0, 0, originHeight];
     geometry.components[0].material = new MeshMaterialMetallicRoughness({
         emissiveColor: [color.r, color.g, color.b],
     });
@@ -164,18 +165,18 @@ const getGeometry = (origin: Point, size: number, color: __esri.Color, gradient:
     return geometry;
 };
 
-const addBarGraphic = (originPoint: __esri.Point, size: number, station: StationInformation, layer: GraphicsLayer, color: Color, gradient: boolean) => {
+const addBarGraphic = (originPoint: __esri.Point, originHeight: number, size: number, station: StationInformation, layer: GraphicsLayer, color: Color, gradient: boolean) => {
     const graphic = new Graphic({
-        geometry: getGeometry(originPoint, size, color, gradient),
+        geometry: getGeometry(originPoint, originHeight, size, color, gradient),
         attributes: {
             ...station,
             size
         },
         symbol: barSymbol
     });
-    if (!gradient) {
-        graphic.visible = false;
-    }
+    // if (!gradient) {
+    //     graphic.visible = false;
+    // }
     layer.graphics.push(graphic);
 }
 
@@ -193,7 +194,7 @@ const addLabelGraphic = (origin: Point, size: number, station: StationInformatio
             stationID: station.stationID,
             totalDocks: station.totalDocks
         },
-        symbol: getLabelSymbol(station.totalDocks)
+        symbol: getLabelSymbol(station.bikeCount)
     });
     labelsStations.add(labelGraphic);
 }
@@ -207,10 +208,11 @@ const createGraphics = (stationsInformation: Array<StationInformation>) => {
                 wkid: 4326,
             },
         });
-        const bikeSize = getSizeFromValue(stationInformation.totalDocks);
-        addBarGraphic(originPoint, bikeSize, stationInformation, bikeStations, bikeColor, true);
-        addBarGraphic(originPoint, 0, stationInformation, dockingStations, dockingColor, false);
-        addLabelGraphic(originPoint, bikeSize, stationInformation);
+        const bikeSize = getSizeFromValue(stationInformation.bikeCount);
+        const dockSize = getSizeFromValue(stationInformation.totalDocks - stationInformation.bikeCount);
+        addBarGraphic(originPoint, 0, bikeSize, stationInformation, bikeStations, bikeColor, true);
+        addBarGraphic(originPoint, bikeSize, dockSize, stationInformation, dockingStations, dockingColor, false);
+        addLabelGraphic(originPoint, bikeSize + dockSize, stationInformation);
     });
 }
 
@@ -256,13 +258,13 @@ const updateLabelGraphic = (feature: StreamFeature) => {
 }
 
 export const initializeStreamMock = (view: __esri.SceneView) => async (dispatch: AppDispatch) => {
-    const data = await fetchCSV('./data/final_dataset_id.csv');
-    const stations = await fetchCSV('./data/cambridge_bike_station_information.csv');
+    const data = await fetchCSV('./data/final_dataset.csv');
+    const stations = await fetchCSV('./data/bike_station_with_initial_counts.csv');
     const stationsInformation = stations.map(station => {
         return {
             stationID: station.shortName,
             totalDocks: parseInt(station.totalDocks),
-            bikeCount: parseInt(station.totalDocks),
+            bikeCount: parseInt(station.initialCount),
             hasKiosk: station.hasKiosk === "True",
             hasKeyDispenser: station.hasKeyDispenser === "True",
             name: station.name,

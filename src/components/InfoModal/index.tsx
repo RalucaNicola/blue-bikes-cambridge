@@ -32,10 +32,24 @@ const InfoModal = () => {
           </div>
         </div>
         <div className={styles.textInfo}>
-          <h2>About this application</h2>
-          <p>This is a template to create web mapping applications.</p>
-
-          <h2>Resources</h2>
+          <p>Demo application for monitoring real time bicycle data in the city of Cambridge, Massachussetts.</p>
+          <p>
+            Accidents data from{' '}
+            <a
+              href='https://data.cambridgema.gov/Public-Safety/Police-Department-Crash-Data-Updated/gb5w-yva3'
+              target='_blank'
+            >
+              Cambridge Police Department
+            </a>
+            .
+          </p>
+          <p>
+            Bycicle feeds and station information from{' '}
+            <a href='https://bluebikes.com/system-data' target='_blank'>
+              Blue Bikes system data
+            </a>
+            .
+          </p>
           <p>
             {' '}
             Built using{' '}
