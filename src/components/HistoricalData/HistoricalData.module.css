@@ -1,6 +1,11 @@
 .container {
   height: 150px;
   overflow: auto;
+  padding-right: 10px;
+}
+
+.container > * {
+  margin-bottom: 20px;
 }
 
 .notificationCard {
@@ -18,4 +23,11 @@
   line-height: 1.1rem;
   margin-top: 10px;
   color: var(--calcite-ui-text-3);
+}
+
+.legendSymbol {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
 }
