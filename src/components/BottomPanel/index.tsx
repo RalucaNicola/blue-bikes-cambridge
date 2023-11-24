@@ -10,7 +10,7 @@ import { setInfoModalOptions } from '../../store/modalSlice';
 import Section from '../Section';
 import BikeTripsStatistics from '../BikeTripsStatistics';
 import StationsList from '../StationsList';
-import AccidentsStatistics from '../AccidentsStatistics';
+import HistoricalData from '../HistoricalData';
 
 const BottomPanel = () => {
   const [visible, setVisible] = useState(true);
@@ -61,9 +61,9 @@ const BottomPanel = () => {
               <StationsList></StationsList>
             </Section>
           </div>
-          <div style={{ gridArea: 'accidents' }}>
-            <Section title='accidents'>
-              <AccidentsStatistics></AccidentsStatistics>
+          <div style={{ gridArea: 'historical' }}>
+            <Section title='historical data'>
+              <HistoricalData></HistoricalData>
             </Section>
           </div>
         </div>

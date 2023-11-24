@@ -1,5 +1,5 @@
 export const mapConfig = {
-  'web-map-id': '5f550d52a16a40e2afaba923a91c60a9'
+  'web-map-id': '06f362a010dc4c3d98025df2dde3370c'
 };
 
 export const portalUrl = 'https://geoxc-demox.maps.arcgis.com/';

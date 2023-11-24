@@ -41,7 +41,7 @@
   display: grid;
   grid-template-columns: 1fr 2fr 1fr;
   grid-template-rows: 1fr;
-  grid-template-areas: 'bikes stations accidents';
+  grid-template-areas: 'bikes stations historical';
   column-gap: 2rem;
   max-width: min(900px, 80%);
   margin: 0 auto;

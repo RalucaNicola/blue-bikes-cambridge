@@ -11,7 +11,7 @@ import { initializeBikeFeed, removeBikeFeedFromMap } from './bikeFeed';
 import { destroyStations, initializeStationFeed, initializeStations } from './stationFeed';
 import { toggleBasemap } from '../../store/basemapSlice';
 import { UnsubscribeListener } from '@reduxjs/toolkit';
-import { initializeAccidentsLayer } from './accidentsLayer';
+import { initializeHistoricalLayers, removeHistoricalListeners } from './historicalLayers';
 import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
 import { initializeStreamMock } from './streamMock';
@@ -30,6 +30,7 @@ export function destroyView() {
     if (view) {
         removeBikeFeedFromMap(view);
         removeStoreListeners();
+        removeHistoricalListeners();
         destroyStations(view);
         view.destroy();
         view = null;
@@ -86,7 +87,7 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
             dispatch(initializeStreamMock(view));
             // initializeStations(view);
             //initializeStationFeed();
-            initializeAccidentsLayer(view);
+            initializeHistoricalLayers(view);
             const basemapListener = { actionCreator: toggleBasemap, effect: updateBasemap };
             unsubscribeListeners.push(listenerMiddleware.startListening(basemapListener));
         });
