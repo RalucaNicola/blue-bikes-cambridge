@@ -87,7 +87,7 @@ export const initializeView = (divRef: HTMLDivElement) => async (dispatch: AppDi
             dispatch(initializeStreamMock(view));
             // initializeStations(view);
             //initializeStationFeed();
-            initializeHistoricalLayers(view);
+            dispatch(initializeHistoricalLayers(view));
             const basemapListener = { actionCreator: toggleBasemap, effect: updateBasemap };
             unsubscribeListeners.push(listenerMiddleware.startListening(basemapListener));
         });

@@ -1,20 +1,11 @@
 .container {
-  height: 150px;
+  height: 220px;
   overflow: auto;
-  padding-right: 10px;
+  padding: 5px 10px 5px 5px;
 }
 
 .container > * {
   margin-bottom: 20px;
-}
-
-.notificationCard {
-  background-color: rgb(255, 217, 0, 0.2);
-  border-radius: var(--border-radius);
-  border: 1px solid rgb(255, 217, 0);
-  padding: 10px;
-  margin: 10px;
-  cursor: pointer;
 }
 
 .note {
@@ -30,4 +21,38 @@
   flex-direction: row;
   align-items: center;
   gap: 5px;
+}
+
+.constructionSite {
+  border-radius: 50px 0 0 50px;
+  background-color: var(--calcite-ui-foreground-1);
+  margin: 10px 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.constructionSite:hover {
+  background-color: rgba(50, 50, 50, 0.6);
+}
+
+.constructionSiteImage {
+  width: 35px;
+  height: 35px;
+  margin: 5px 15px 5px 5px;
+}
+
+.constructionSiteImage > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.constructionSiteSchedule {
+  font-size: 0.8rem;
+}
+
+.constructionSiteTitle {
+  font-size: 0.9rem;
+  font-weight: bold;
 }

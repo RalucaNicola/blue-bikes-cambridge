@@ -1,19 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { ConstructionSite } from '../types/types';
 
-export interface BasemapType {
+export interface HistoricalState {
     accidentsLayerVisible?: boolean;
     routesLayerVisible?: boolean;
     constructionsLayerVisible?: boolean;
+    constructionSites: Array<ConstructionSite>;
 }
 
-const initialState = {
+const initialState: HistoricalState = {
     accidentsLayerVisible: false,
     routesLayerVisible: false,
-    constructionsLayerVisible: false
+    constructionsLayerVisible: false,
+    constructionSites: []
 };
 
 const historicalSlice = createSlice({
-    name: 'basemapType',
+    name: 'historical',
     initialState,
     reducers: {
         toggleAccidentsLayer(state) {
@@ -24,9 +27,12 @@ const historicalSlice = createSlice({
         },
         toggleConstructionsLayer(state) {
             state.constructionsLayerVisible = !state.constructionsLayerVisible;
+        },
+        setConstructionSites(state, action) {
+            state.constructionSites = action.payload;
         }
     }
 });
 
-export const { toggleAccidentsLayer, toggleRoutesLayer, toggleConstructionsLayer } = historicalSlice.actions;
+export const { toggleAccidentsLayer, toggleRoutesLayer, toggleConstructionsLayer, setConstructionSites } = historicalSlice.actions;
 export default historicalSlice.reducer;

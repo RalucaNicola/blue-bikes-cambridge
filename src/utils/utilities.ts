@@ -10,6 +10,11 @@ export const now = Date.now || function () {
     return new Date().getTime();
 };
 
+export const formatDate = (time: number) => {
+    const date = new Date(time);
+    return new Intl.DateTimeFormat("en-US").format(date);
+}
+
 function restArguments<T extends (...args: any[]) => any>(func: T) {
     let startIndex = func.length - 1;
     return function () {

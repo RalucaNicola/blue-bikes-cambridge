@@ -9,4 +9,9 @@ export interface CountryRegions {
 
 export type CountryData = CountryRegions[] & { columns?: String[] };
 
-export interface EutrophicationData {}
+export interface ConstructionSite {
+  id: number;
+  address: string;
+  end: number;
+  start: number;
+}
