@@ -52,13 +52,13 @@ const BottomPanel = () => {
       <motion.div layout='size' animate={{ height: visible ? 'auto' : 0 }} style={{ overflow: 'hidden' }}>
         <div className={styles.dashboardContainer}>
           <div style={{ gridArea: 'bikes' }}>
-            <Section title='bike trips'>
-              <BikeTripsStatistics></BikeTripsStatistics>
-            </Section>
-          </div>
-          <div style={{ gridArea: 'stations' }}>
-            <Section title='stations'>
-              <StationsList></StationsList>
+            <Section title='live data'>
+              <div className={styles.columnDisplay}>
+                <BikeTripsStatistics></BikeTripsStatistics>
+                <div>
+                  <StationsList></StationsList>
+                </div>
+              </div>
             </Section>
           </div>
           <div style={{ gridArea: 'historical' }}>

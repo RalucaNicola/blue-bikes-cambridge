@@ -46,7 +46,7 @@ const StationsList = () => {
                 <h4>{station.name}</h4>
                 <div style={{ display: 'flex', fontSize: '0.9rem' }}>
                   <Counts type='bikes' count={station.bikeCount}></Counts>
-                  <Counts type='docks' count={Math.max(0, station.totalDocks - station.bikeCount)}></Counts>
+                  {/* <Counts type='docks' count={Math.max(0, station.totalDocks - station.bikeCount)}></Counts> */}
                 </div>
               </motion.div>
             );

@@ -65,7 +65,7 @@ const Popup = () => {
           <Section title='Availability'>
             <div style={{ display: 'flex' }}>
               <Counts type='bikes' count={selectedStation.bikeCount}></Counts>
-              <Counts type='docks' count={Math.max(0, selectedStation.totalDocks - selectedStation.bikeCount)}></Counts>
+              {/* <Counts type='docks' count={Math.max(0, selectedStation.totalDocks - selectedStation.bikeCount)}></Counts> */}
             </div>
           </Section>
           <Section title='Rental methods'>
@@ -78,12 +78,12 @@ const Popup = () => {
                 <CalciteIcon icon='credit-card' scale='m'></CalciteIcon> Credit card
               </CalciteLabel>
             </div>
-            {selectedStation.hasKeyDispenser ? (
-              <div>Has a key dispenser.</div>
-            ) : (
-              <div> Doesn't have a key dispenser.</div>
-            )}
           </Section>
+          {selectedStation.hasKeyDispenser ? (
+            <div>Has a key dispenser.</div>
+          ) : (
+            <div> Doesn't have a key dispenser.</div>
+          )}
         </div>
       </motion.div>
     )

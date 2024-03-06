@@ -16,7 +16,7 @@ const BikeTripsStatistics = () => {
 
   return (
     <div className={styles.container}>
-      <motion.div className={styles.tripCount}>{round}</motion.div> current trips
+      <motion.div className={styles.tripCount}>{round}</motion.div> TRIPS
     </div>
   );
 };

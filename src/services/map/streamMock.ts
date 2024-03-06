@@ -249,7 +249,6 @@ const createGraphics = (stationsInformation: Array<StationInformation>) => {
 }
 
 const updateIconGraphic = (feature: StreamFeature) => {
-    console.log("update", feature);
     const { stationID, bikeCount, totalDocks } = feature.attributes;
     const bikeGraphic = bikeStations.graphics.find(graphic => {
         return graphic.attributes.stationID === stationID;

@@ -37,11 +37,19 @@
   align-items: center;
 }
 
+.columnDisplay {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
 .dashboardContainer {
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr;
+  grid-template-columns: 3fr 2fr;
   grid-template-rows: 1fr;
-  grid-template-areas: 'bikes stations historical';
+  grid-template-areas: 'bikes historical';
   column-gap: 2rem;
   max-width: min(900px, 80%);
   margin: 0 auto;

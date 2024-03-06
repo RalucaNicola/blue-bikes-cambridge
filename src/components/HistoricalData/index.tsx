@@ -12,23 +12,23 @@ const Legend = () => {
     <>
       <div className={styles.legendSymbol}>
         <div style={{ borderBottom: '1px solid #F7FBFF', width: '100px', height: 0 }}></div>
-        <div> 1 - 9 routes</div>
+        <div> 1 - 9 trips</div>
       </div>
       <div className={styles.legendSymbol}>
         <div style={{ borderBottom: '2px solid #C6DBEF', width: '100px', height: 0 }}></div>
-        <div> 10 - 24 routes</div>
+        <div> 10 - 24 trips</div>
       </div>
       <div className={styles.legendSymbol}>
         <div style={{ borderBottom: '3px solid #6BAED6', width: '100px', height: 0 }}></div>
-        <div> 25 - 45 routes</div>
+        <div> 25 - 45 trips</div>
       </div>
       <div className={styles.legendSymbol}>
         <div style={{ borderBottom: '5px solid #2171B5', width: '100px', height: 0 }}></div>
-        <div> 46 - 87 routes</div>
+        <div> 46 - 87 trips</div>
       </div>
       <div className={styles.legendSymbol}>
         <div style={{ borderBottom: '6px solid #08306B', width: '100px', height: 0 }}></div>
-        <div> 88 - 147 routes</div>
+        <div> 88 - 147 trips</div>
       </div>
     </>
   );
@@ -51,11 +51,13 @@ const HistoricalData = () => {
             onCalciteSwitchChange={() => dispatch(toggleAccidentsLayer())}
           ></CalciteSwitch>
         </CalciteLabel>
-        <div className={styles.note}>Historical accident data from January 2015 until October 2023.</div>
+        {accidentsVisible && (
+          <div className={styles.note}>Historical accident data from January 2015 until February 2024.</div>
+        )}
       </div>
       <div>
         <CalciteLabel layout='inline-space-between' scale='l'>
-          Bicycle routes{' '}
+          Bicycle trips{' '}
           <CalciteSwitch
             checked={routesVisible ? true : undefined}
             onCalciteSwitchChange={() => dispatch(toggleRoutesLayer())}
