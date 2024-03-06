@@ -1,5 +1,5 @@
 .container {
-  height: 220px;
+  max-height: 170px;
   overflow: auto;
   padding: 5px 10px 5px 5px;
 }

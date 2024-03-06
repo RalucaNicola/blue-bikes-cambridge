@@ -5,6 +5,7 @@
   left: 0;
   right: 0;
   padding: 15px;
+  max-height: 35%;
 }
 
 .actionsContainer {
