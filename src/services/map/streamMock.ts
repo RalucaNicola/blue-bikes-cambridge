@@ -3,11 +3,11 @@ import Mesh from '@arcgis/core/geometry/Mesh';
 import { lngLatToXY } from '@arcgis/core/geometry/support/webMercatorUtils';
 import StreamLayer from '@arcgis/core/layers/StreamLayer';
 import { SimpleRenderer } from '@arcgis/core/renderers';
-import { LabelSymbol3D, SimpleMarkerSymbol, TextSymbol3DLayer } from '@arcgis/core/symbols';
+import { IconSymbol3DLayer, LabelSymbol3D, PointSymbol3D, SimpleMarkerSymbol, TextSymbol3DLayer } from '@arcgis/core/symbols';
 import { DSVRowArray, csv } from 'd3';
 import { AppDispatch, listenerMiddleware } from '../../store/storeConfiguration';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
-import { barSymbol, bikeColor, bikeFeedRenderer, dockingColor, getLabelSymbol, overflowColor } from '../../utils/symbology';
+import { barSymbol, bikeColor, bikeFeedRenderer, dockingColor, getDonutChartImage, getLabelSymbol, overflowColor } from '../../utils/symbology';
 import LabelClass from '@arcgis/core/layers/support/LabelClass';
 import { setBikeTripsCount } from '../../store/bikeTripsSlice';
 import MeshMaterialMetallicRoughness from '@arcgis/core/geometry/support/MeshMaterialMetallicRoughness';
@@ -180,6 +180,37 @@ const addBarGraphic = (originPoint: __esri.Point, originHeight: number, size: nu
     layer.graphics.push(graphic);
 }
 
+const addIconGraphic = (origin: Point, station: StationInformation) => {
+    const graphic = new Graphic({
+        geometry: origin,
+        attributes: {
+            ...station
+        },
+        symbol: new PointSymbol3D({
+            symbolLayers: [new IconSymbol3DLayer({
+                resource: { href: getDonutChartImage(station.bikeCount, station.totalDocks) },
+                material: { color: [255, 255, 255, 1] },
+                anchor: "bottom",
+                size: 30
+            })],
+            verticalOffset: {
+                screenLength: 20,
+                maxWorldLength: 200,
+                minWorldLength: 20
+            },
+            callout: {
+                type: "line",
+                size: 1.5,
+                color: bikeColor,
+                border: {
+                    color: [0, 0, 0, 0]
+                }
+            }
+        })
+    });
+    bikeStations.graphics.push(graphic);
+}
+
 const addLabelGraphic = (origin: Point, size: number, station: StationInformation) => {
     const labelGraphic = new Graphic({
         geometry: new Point({
@@ -208,12 +239,24 @@ const createGraphics = (stationsInformation: Array<StationInformation>) => {
                 wkid: 4326,
             },
         });
-        const bikeSize = getSizeFromValue(stationInformation.bikeCount);
-        const dockSize = getSizeFromValue(stationInformation.totalDocks - stationInformation.bikeCount);
-        addBarGraphic(originPoint, 0, bikeSize, stationInformation, bikeStations, bikeColor, true);
-        addBarGraphic(originPoint, bikeSize, dockSize, stationInformation, dockingStations, dockingColor, false);
-        addLabelGraphic(originPoint, bikeSize + dockSize, stationInformation);
+        // const bikeSize = getSizeFromValue(stationInformation.bikeCount);
+        // const dockSize = getSizeFromValue(stationInformation.totalDocks - stationInformation.bikeCount);
+        addIconGraphic(originPoint, stationInformation);
+        //addBarGraphic(originPoint, 0, bikeSize, stationInformation, bikeStations, bikeColor, true);
+        //addBarGraphic(originPoint, bikeSize, dockSize, stationInformation, dockingStations, dockingColor, false);
+        //addLabelGraphic(originPoint, bikeSize + dockSize, stationInformation);
     });
+}
+
+const updateIconGraphic = (feature: StreamFeature) => {
+    console.log("update", feature);
+    const { stationID, bikeCount, totalDocks } = feature.attributes;
+    const bikeGraphic = bikeStations.graphics.find(graphic => {
+        return graphic.attributes.stationID === stationID;
+    });
+    const symbol = (bikeGraphic.symbol as PointSymbol3D).clone();
+    (symbol.symbolLayers.getItemAt(0) as IconSymbol3DLayer).resource.href = getDonutChartImage(bikeCount, totalDocks);
+    bikeGraphic.symbol = symbol;
 }
 
 const updateBarGraphics = (feature: StreamFeature) => {
@@ -306,8 +349,9 @@ export const initializeStreamMock = (view: __esri.SceneView) => async (dispatch:
                     dispatch(setBikeTripsCount(count));
                 });
             } else {
-                updateBarGraphics(feature);
-                updateLabelGraphic(feature);
+                // updateBarGraphics(feature);
+                // updateLabelGraphic(feature);
+                updateIconGraphic(feature);
                 let station = stationsInformation.find(station => station.stationID === stationID);
                 dispatch(updateStation({ ...station, bikeCount: feature.attributes.bikeCount }));
             }

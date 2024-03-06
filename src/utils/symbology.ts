@@ -54,3 +54,39 @@ export const getLabelSymbol = (label: number) => {
         },
     });
 }
+
+export const getDonutChartImage = (bikeCount: number, totalCount: number) => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 100;
+    canvas.height = 100;
+    const ctx = canvas.getContext("2d");
+    const total = totalCount + 10;
+    const values = [bikeCount, total - bikeCount];
+    const colors = [`rgba(${bikeColor.r}, ${bikeColor.g}, ${bikeColor.b}, 1)`, "rgba(120, 120, 120, 1)"];
+    const distance = 7 * Math.PI / 180;
+    let startAngle = distance;
+
+    for (let i = 0; i < values.length; i++) {
+        const endAngle = startAngle + (values[i] / total) * 2 * Math.PI - distance;
+        ctx.beginPath();
+        ctx.arc(canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height) / 2, startAngle, endAngle, false);
+        ctx.arc(canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height) / 4, endAngle, startAngle, true);
+        ctx.closePath();
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+        startAngle = endAngle + distance;
+    }
+
+    ctx.beginPath();
+    ctx.arc(canvas.width / 2, canvas.height / 2, Math.min(canvas.width, canvas.height) / 4, 0, 2 * Math.PI);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.fill();
+
+    ctx.fillStyle = '#006fc4';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 35px Arial';
+    ctx.fillText(bikeCount.toString(), canvas.width / 2, canvas.height / 2);
+
+    return canvas.toDataURL("image/png");
+}
